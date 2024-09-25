@@ -10,12 +10,13 @@ public class OrderRequest
     /// <summary>
     /// Order Status
     /// </summary>
-    [Field] public string? Status { get; set; }
-    
+    [Field] public string Status { get; set; } = "pending";
+
     /// <summary>
     /// Payment details
     /// </summary>
-    [Field] public Dictionary<string, string>? Payment { get; set; }
+    [Field]
+    public Dictionary<string, string> Payment { get; set; } = new();
 }
 
 /// <summary>

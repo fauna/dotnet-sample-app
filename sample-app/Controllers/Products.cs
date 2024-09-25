@@ -1,8 +1,6 @@
 using dotnet_sample_app.Models;
 using dotnet_sample_app.Repositories;
 using Fauna;
-using Fauna.Linq;
-using Fauna.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_sample_app.Controllers;
@@ -36,6 +34,18 @@ public class Products(Client client) : ControllerBase
     )
     {
         return Ok(await _productDb.List(category, afterToken, pageSize));
+    }
+
+    /// <summary>
+    /// List Product Categories
+    /// </summary>
+    /// <returns>List of Product Categories Names</returns>
+    [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetProductCategories()
+    {
+        return Ok(await _productDb.Categories.Select(c => c.Name).ToListAsync());
     }
 
     /// <summary>

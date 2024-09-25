@@ -1,7 +1,6 @@
 using dotnet_sample_app.Models;
 using dotnet_sample_app.Repositories;
 using Fauna;
-using Fauna.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_sample_app.Controllers;
@@ -14,7 +13,8 @@ namespace dotnet_sample_app.Controllers;
  Route("/[controller]")]
 public class Orders(Client client) : ControllerBase
 {
-
+    
+    
     private readonly OrderDb _orderDb = client.DataContext<OrderDb>();
 
     /// <summary>
@@ -50,5 +50,22 @@ public class Orders(Client client) : ControllerBase
     )
     {
         return Ok(await _orderDb.Update(id, order));
+    }
+
+    /// <summary>
+    /// Get Completed Orders
+    /// </summary>
+    /// <returns></returns>
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [HttpGet("list")]
+    public async Task<IActionResult> ListOrders()
+    {
+        return Ok(await _orderDb.Orders.Select(o => new 
+        {
+               id = o.Id,
+               status = o.Status,
+               total = o.Total
+        }).ToListAsync());
     }
 }

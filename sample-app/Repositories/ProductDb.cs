@@ -8,6 +8,11 @@ namespace dotnet_sample_app.Repositories;
 // ReSharper disable once ClassNeverInstantiated.Global
 internal class ProductDb : DataContext
 {
+    internal class CategoryCol : Collection<Category> {}
+
+    public CategoryCol Categories => GetCollection<CategoryCol>();
+
+
     private readonly Query _response = Query.FQL($$"""
                                                    // Use projection to return only the necessary fields.
                                                    product {
@@ -33,14 +38,17 @@ internal class ProductDb : DataContext
     public async Task<Product> Create(ProductRequest product)
     {
         var result = await QueryAsync<Product>(Query.FQL($$"""
-                                                           // Get the category by name. We can use .first() here because we know that the category name is unique.
                                                            let category = Category.byName({{product.Category}}).first()
-
-                                                           // If the category does not exist, abort the transaction.
                                                            if (category == null) abort("Category does not exist.")
 
                                                            // Create the product with the given values.
-                                                           let args = { name: {{product.Name}}, price: {{product.Price}}, stock: {{product.Stock}}, description: {{product.Description}}, category: category }
+                                                           let args = { 
+                                                                name: {{product.Name}},
+                                                                price: {{product.Price}},
+                                                                stock: {{product.Stock}},
+                                                                description: {{product.Description}},
+                                                                category: category 
+                                                           }
                                                            let product: Any = Product.create(args)
 
                                                            {{_response}}
@@ -65,14 +73,18 @@ internal class ProductDb : DataContext
                                 // Get the category by name. We can use .first() here because we know that the category
                                 // name is unique.
                                 let category:Any = Category.byName({{product.Category}})?.first()
-
-                                // If a category was provided and it does not exist, abort the transaction.
                                 if (category == null) abort("Category does not exist.")
 
                                 // Update category if a new one was provided
                                 let newCategory: Any = Category.byName({{product.Category}})?.first()
 
-                                let fields = { name: {{product.Name}}, price: {{product.Price}}, stock: {{product.Stock}}, description: {{product.Description}} }
+                                let fields = {
+                                    name: {{product.Name}},
+                                    price: {{product.Price}},
+                                    stock: {{product.Stock}},
+                                    description: {{product.Description}}
+                                }
+
                                 if (newCategory != null && newCategory.id != category.id) {
                                   // If a category was provided, update the product with the new category document as well as
                                   // any other fields that were provided.
@@ -96,7 +108,7 @@ internal class ProductDb : DataContext
     public async Task Delete(string id)
     {
         await QueryAsync(Query.FQL($"""
-                                    let product: Product? = Product.byId({id})  
+                                    let product: Product? = Product.byId({id})
                                     if (product == null) abort("Product does not exist.")
 
                                     product!.delete()

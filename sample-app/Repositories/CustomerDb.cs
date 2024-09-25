@@ -8,58 +8,22 @@ namespace dotnet_sample_app.Repositories;
 // ReSharper disable once ClassNeverInstantiated.Global
 internal class CustomerDb : DataContext
 {
-    private static readonly Query _response = Query.FQL($$"""
-                                                          // Use projection to return only the necessary fields.
-                                                          customer {
-                                                              id,
-                                                              name,
-                                                              email,
-                                                              address
-                                                          }
-                                                          """);
-
     /// <summary>
     /// Get customer by id
     /// </summary>
     /// <param name="id"></param>
     /// <returns>Customer</returns>
-    public async Task<Customer> Get(string id)
-    {
-        var query = Query.FQL($"""
-                               let customer :Customer? = Customer.byId({id})
-                               if (customer == null) abort("Customer does not exist.")
-
-                               {_response}
-                               """);
-        var result = await QueryAsync<Customer>(query);
-        return result.Data;
-    }
+    public async Task<Customer> Get(string id) =>
+        await Fn<Customer>("getCustomer").CallAsync(id); // see schema/functions.fsl
+    
 
     /// <summary>
     /// Create Customer
     /// </summary>
     /// <param name="customer"></param>
     /// <returns>Customer</returns>
-    public async Task<Customer> Create(CustomerRequest customer)
-    {
-        var query = Query.FQL($$"""
-                                let customer: Customer = Customer.create({
-                                  name: {{customer.Name}}, 
-                                  email: {{customer.Email}}, 
-                                  address: { 
-                                      street: {{customer.Address.Street}}, 
-                                      city: {{customer.Address.City}},
-                                      state: {{customer.Address.State}},
-                                      country: {{customer.Address.Country}},
-                                      postalCode: {{customer.Address.PostalCode}}
-                                  }
-                                })
-
-                                {{_response}}
-                                """);
-        var result = await QueryAsync<Customer>(query);
-        return result.Data;
-    }
+    public async Task<Customer> Create(CustomerRequest customer) =>
+        await Fn<Customer>("createCustomer").CallAsync(customer); // see schema/functions.fsl
 
     /// <summary>
     /// Update Customer
@@ -67,29 +31,8 @@ internal class CustomerDb : DataContext
     /// <param name="id">Customer ID</param>
     /// <param name="customer">Updated Customer details</param>
     /// <returns></returns>
-    public async Task<Customer> Update(string id, CustomerRequest customer)
-    {
-        var query = Query.FQL($$"""
-                                let customer :Customer? = Customer.byId({{id}})
-                                if (customer == null) abort("Customer does not exist.")
-
-                                customer!.update({
-                                  name: {{customer.Name}},
-                                  email: {{customer.Email}},
-                                  address: { 
-                                      street: {{customer.Address.Street}}, 
-                                      city: {{customer.Address.City}}, 
-                                      state: {{customer.Address.State}}, 
-                                      country: {{customer.Address.Country}}, 
-                                      postalCode: {{customer.Address.PostalCode}}
-                                  }
-                                })
-
-                                {{_response}}
-                                """);
-        var result = await QueryAsync<Customer>(query);
-        return result.Data;
-    }
+    public async Task<Customer> Update(string id, CustomerRequest customer) =>
+        await Fn<Customer>("updateCustomer").CallAsync(id, customer); // see schema/functions.fsl
 
     /// <summary>
     /// Delete Customer by ID
@@ -110,39 +53,16 @@ internal class CustomerDb : DataContext
     /// </summary>
     /// <param name="customerId">Customer ID</param>
     /// <returns>Page of Orders</returns>
-    public async Task<Page<Order>> GetOrdersByCustomer(string customerId)
-    {
-        var query = Query.FQL($$"""
-                                let customer :Customer? = Customer.byId({{customerId}})
-                                if (customer == null) abort("Customer does not exist.")
-
-                                Order.byCustomer(customer).map((order) => {
-                                  let order: Any = order
-                                  {{OrderDb.Response}}
-                                })
-                                """);
-        var result = await QueryAsync<Page<Order>>(query);
-        return result.Data;
-    }
+    public async Task<Page<Order>> GetOrdersByCustomer(string customerId) =>
+        await Fn<Page<Order>>("getOrdersByCustomer").CallAsync(customerId); // see schema/functions.fsl
 
     /// <summary>
     /// Get or create cart for Customer
     /// </summary>
     /// <param name="customerId">Customer ID</param>
     /// <returns>Order</returns>
-    public async Task<Order> GetOrCreateCart(string customerId)
-    {
-        var query = Query.FQL($"""
-                               let customer :Customer? = Customer.byId({customerId})
-                               if (customer == null) abort("Customer does not exist.")
-
-                               let order: Any = getOrCreateCart(customer!.id)
-
-                               {OrderDb.Response}
-                               """);
-        var result = await QueryAsync<Order>(query);
-        return result.Data;
-    }
+    public async Task<Order> GetOrCreateCart(string customerId) =>
+        await Fn<Order>("getOrCreateCartForCustomer").CallAsync(customerId); // see schema/functions.fsl
 
     /// <summary>
     /// Add item to cart
@@ -150,17 +70,6 @@ internal class CustomerDb : DataContext
     /// <param name="customerId">Customer ID</param>
     /// <param name="item">Item Details</param>
     /// <returns>Order</returns>
-    public async Task<Order> AddItemToCart(string customerId, AddItemToCartRequest item)
-    {
-        var query = Query.FQL($"""
-                               let customer :Customer? = Customer.byId({customerId})
-                               if (customer == null) abort("Customer does not exist.")
-
-                               let order: Any = createOrUpdateCartItem(customer!.id, {item.ProductName}, {item.Quantity})
-
-                               {OrderDb.Response}
-                               """);
-        var result = await QueryAsync<Order>(query);
-        return result.Data;
-    }
+    public async Task<Order> AddItemToCart(string customerId, AddItemToCartRequest item) =>
+        await Fn<Order>("updateCartItem").CallAsync(customerId, item.ProductName, item.Quantity); // see schema/functions.fsl
 }

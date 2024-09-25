@@ -130,3 +130,125 @@ function validateOrderStatusTransition(oldStatus, newStatus) {
     abort("Invalid status transition.")
   }
 }
+
+function returnCustomer(customer: Customer): Any {
+  customer {
+      id,
+      name,
+      email,
+      address
+  }
+}
+
+function getCustomer(id: ID): Any {
+  let customer :Customer? = Customer.byId({id})
+  if (customer == null) abort("Customer does not exist.")
+
+  returnCustomer(customer!)
+}
+
+function createCustomer(input: Any): Any {
+    let customer: Customer = Customer.create(input)
+    returnCustomer(customer)
+}
+
+function updateCustomer(id: ID, input: Any): Any {
+    let customer :Customer? = Customer.byId({id})
+    if (customer == null) abort("Customer does not exist.")
+
+    customer!.update(input)
+    returnCustomer(customer!)
+}
+
+function deleteCustomer(id: ID): Any {
+    let customer :Customer? = Customer.byId({id})
+    if (customer == null) abort("Customer does not exist.")
+
+    customer!.delete()
+}
+
+
+function returnOrder(order: Any): Any {
+    {
+        id: order.id,
+        payment: order.payment,
+        createdAt: order.createdAt,
+        status: order.status,
+        total: order.total,
+        items: order.items.toArray().map((item) => {
+          product: {
+            id: item.product.id,
+            name: item.product.name,
+            price: item.product.price,
+            description: item.product.description,
+            stock: item.product.stock,
+            category: {
+              id: item.product.category.id,
+              name: item.product.category.name,
+              description: item.product.category.description
+            }
+          },
+          quantity: item.quantity
+        }),
+        customer: {
+          id: order.customer.id,
+          name: order.customer.name,
+          email: order.customer.email,
+          address: order.customer.address
+        }
+    }
+}
+
+function getOrdersByCustomer(id: ID): Any {
+    let customer :Customer? = Customer.byId({id})
+    if (customer == null) abort("Customer does not exist.")
+
+    Order.byCustomer(customer!).map((order) => {
+      let order: Any = order
+      returnOrder(order)
+    })
+}
+
+// Wrapper function to get or create a cart for a customer with projection.
+function getOrCreateCartForCustomer(id: ID): Any {
+    let customer :Customer? = Customer.byId({id})
+    if (customer == null) abort("Customer does not exist.")
+
+    let order: Any = getOrCreateCart(customer!.id)
+
+    returnOrder(order)
+}
+
+function updateCartItem(id: ID, item: String, quantity: Int): Any {
+    let customer :Customer? = Customer.byId({id})
+    if (customer == null) abort("Customer does not exist.")
+
+    let order: Any = createOrUpdateCartItem(customer!.id, item, quantity)
+
+    returnOrder(order)
+}
+
+function getOrder(id: ID): Any {
+    let order :Order? = Order.byId({id})
+    if (order == null) abort("Order does not exist.")
+
+    returnOrder(order)
+}
+
+function updateOrder(id: ID, status: String, payment: Any): Any {
+    if (status == "processing") {
+      let order: Any = checkout(id, status, { type: "credit_card" })
+      returnOrder(order)
+    } else {
+      let order :Any = Order.byId(id)
+      if (order == null) abort("Order does not exist.")
+
+      validateOrderStatusTransition(order.status, status)
+
+      if (order.status != "cart" && payment != null) abort("Can not update payment information after an order has been placed.")
+
+      order.update({ status: status, payment: payment })
+
+      returnOrder(order)
+    }
+}

@@ -43,6 +43,27 @@ Content-Type: application/json
     });
 %}
 
+### List Product Categories
+GET {{host}}/products/categories
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response contains products", function() {
+        let jsonData = response.body;
+        let count = jsonData.length;
+        client.assert(count == 3, "Expected 3 categories, got " + count);
+    });
+%}
+
 ### Search Products
 GET {{host}}/products/search?minPrice=1000&maxPrice=10000
 Accept: application/json
@@ -362,6 +383,20 @@ Content-Type: application/json
     client.test("Response is an Order", function() {
         let jsonData = response.body;
         client.assert(jsonData["customerId"] != "", "Must have a customerId");
+    });
+%}
+
+### List Orders
+GET {{host}}/orders/list
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
     });
 %}
 
