@@ -14,6 +14,9 @@ public static class SeedService
     /// <param name="client"></param>
     public static void Init(Client client)
     {
+        // Clear Customer History
+        client.QueryAsync(Query.FQL($"Customer.all().forEach(c => c.delete())")).Wait();
+
         // Ensure categories exist
         client.QueryAsync(Query.FQL($$"""
                                       [
