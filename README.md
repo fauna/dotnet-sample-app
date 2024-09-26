@@ -284,13 +284,14 @@ Customer documents and related API responses:
       }
     }
     ```
+ -->
 
-### Docker 
+### Docker
 
-You can optionally run the sample app in a Docker container 
+You can optionally run the sample app in a Docker container
 
-```sh 
-docker build -t dotnet-sample-app . 
+```sh
+docker build -t dotnet-sample-app .
 docker run -p 8888:8080 -e ASPNETCORE_ENVIRONMENT=Development -e FAUNA_SECRET="" dotnet-sample-app
 ```
 
