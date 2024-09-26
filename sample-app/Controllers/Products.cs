@@ -33,7 +33,7 @@ public class Products(Client client) : ControllerBase
         [FromQuery] int pageSize = 10
     )
     {
-        return Ok(await _productDb.List(category, afterToken, pageSize));
+        return Ok(await _productDb.Products.ToListAsync());
     }
 
     /// <summary>

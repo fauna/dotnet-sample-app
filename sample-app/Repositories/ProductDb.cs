@@ -8,6 +8,9 @@ namespace dotnet_sample_app.Repositories;
 // ReSharper disable once ClassNeverInstantiated.Global
 internal class ProductDb : DataContext
 {
+    internal class ProductCol : Collection<Product> { }
+    public ProductCol Products => GetCollection<ProductCol>();
+    
     internal class CategoryCol : Collection<Category> { }
 
     public CategoryCol Categories => GetCollection<CategoryCol>();
