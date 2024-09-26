@@ -15,7 +15,7 @@ internal class CustomerDb : DataContext
     /// <returns>Customer</returns>
     public async Task<Customer> Get(string id) =>
         await Fn<Customer>("getCustomer").CallAsync(id); // see schema/functions.fsl
-    
+
 
     /// <summary>
     /// Create Customer

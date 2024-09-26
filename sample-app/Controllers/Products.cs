@@ -14,7 +14,7 @@ namespace dotnet_sample_app.Controllers;
 public class Products(Client client) : ControllerBase
 {
     private readonly ProductDb _productDb = client.DataContext<ProductDb>();
-    
+
     /// <summary>
     /// Lists products with optional filtering by category.
     /// </summary>

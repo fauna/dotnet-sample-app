@@ -283,4 +283,15 @@ Customer documents and related API responses:
         "country": "United States"
       }
     }
-    ``` -->
+    ```
+
+### Docker 
+
+You can optionally run the sample app in a Docker container 
+
+```sh 
+docker build -t dotnet-sample-app . 
+docker run -p 8888:8080 -e ASPNETCORE_ENVIRONMENT=Development -e FAUNA_SECRET="" dotnet-sample-app
+```
+
+open: http://localhost:8888/swagger
