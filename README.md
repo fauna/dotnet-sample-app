@@ -164,10 +164,33 @@ dotnet run
 
 Once started, the local server is available at http://localhost:5049.
 
+### Docker
+
+You can also run the app in a Docker container. From the root directory, run:
+
+```sh
+docker build -t dotnet-sample-app .
+export $(grep -v '^#' .env | xargs) && \
+docker run -p 5049:8080 \
+  -e ASPNETCORE_ENVIRONMENT=Development \
+  -e FAUNA_SECRET=$FAUNA_SECRET \
+  dotnet-sample-app
+```
+
+Once started, the local server is available at http://localhost:5049.
+
+## Sample data
+
+The app includes seed data that's populated when you make a successful request to any API endpoint.
 
 ## HTTP API endpoints
 
-<!-- TODO -->
+The app's HTTP API endpoints are defined in the `Controllers` directory.
+
+An OpenAPI spec and Swagger UI docs for the endpoints are available at:
+
+* OpenAPI spec: http://localhost:5049/swagger/v1/swagger.json
+* Swagger UI: http://localhost:5049/swagger/index.html
 
 ### Make API requests
 
@@ -188,7 +211,7 @@ curl -v \
     "description": "A book by Ernest Hemingway",
     "stock": 10,
     "category": "books"
-  }'
+  }' | jq .
 ```
 
 <!-- TODO: Uncomment + update after sample data is done. -->
@@ -285,14 +308,3 @@ Customer documents and related API responses:
     }
     ```
  -->
-
-### Docker
-
-You can optionally run the sample app in a Docker container
-
-```sh
-docker build -t dotnet-sample-app .
-docker run -p 8888:8080 -e ASPNETCORE_ENVIRONMENT=Development -e FAUNA_SECRET="" dotnet-sample-app
-```
-
-open: http://localhost:8888/swagger
