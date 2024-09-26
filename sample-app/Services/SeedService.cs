@@ -24,7 +24,7 @@ public static class SeedService
                                         {name: 'books'},
                                         {name: 'movies'}
                                       ].map(c => {
-                                        Category.byName(c.name).first() ?? Category.create({ name: c.name, description: 'Bargain #{c.name}!' })
+                                        Category.byName(c.name).first() ?? Category.create({ name: c.name, description: "Bargain #{c.name}!" })
                                       })
 
                                       // Force empty return
