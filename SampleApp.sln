@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-sample-app", "sample-app\dotnet-sample-app.csproj", "{9EB6EE06-4E63-4511-852E-48AA0A9EFB21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fauna", "fauna-dotnet\Fauna\Fauna.csproj", "{FAAE672B-E9CD-4B7C-98DD-1CE95B1DF0AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EB6EE06-4E63-4511-852E-48AA0A9EFB21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EB6EE06-4E63-4511-852E-48AA0A9EFB21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EB6EE06-4E63-4511-852E-48AA0A9EFB21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EB6EE06-4E63-4511-852E-48AA0A9EFB21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAAE672B-E9CD-4B7C-98DD-1CE95B1DF0AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAAE672B-E9CD-4B7C-98DD-1CE95B1DF0AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAAE672B-E9CD-4B7C-98DD-1CE95B1DF0AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAAE672B-E9CD-4B7C-98DD-1CE95B1DF0AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

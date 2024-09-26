@@ -89,6 +89,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     ```sh
     git clone git@github.com:fauna/dotnet-sample-app.git
     cd dotnet-sample-app
+    git submodule init && git submodule update
     ```
 
     The repo includes a

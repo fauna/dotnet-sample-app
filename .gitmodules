@@ -1,0 +1,3 @@
+[submodule "fauna-dotnet"]
+	path = fauna-dotnet
+	url = https://github.com/fauna/fauna-dotnet.git
