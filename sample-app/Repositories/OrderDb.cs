@@ -6,7 +6,7 @@ namespace dotnet_sample_app.Repositories;
 // ReSharper disable once ClassNeverInstantiated.Global
 internal class OrderDb : DataContext
 {
-    internal class OrderCol : Collection<Order> {}
+    internal class OrderCol : Collection<Order> { }
 
     public OrderCol Orders => GetCollection<OrderCol>();
 

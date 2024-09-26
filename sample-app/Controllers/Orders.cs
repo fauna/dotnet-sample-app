@@ -13,8 +13,8 @@ namespace dotnet_sample_app.Controllers;
  Route("/[controller]")]
 public class Orders(Client client) : ControllerBase
 {
-    
-    
+
+
     private readonly OrderDb _orderDb = client.DataContext<OrderDb>();
 
     /// <summary>
@@ -61,11 +61,11 @@ public class Orders(Client client) : ControllerBase
     [HttpGet("list")]
     public async Task<IActionResult> ListOrders()
     {
-        return Ok(await _orderDb.Orders.Select(o => new 
+        return Ok(await _orderDb.Orders.Select(o => new
         {
-               id = o.Id,
-               status = o.Status,
-               total = o.Total
+            id = o.Id,
+            status = o.Status,
+            total = o.Total
         }).ToListAsync());
     }
 }

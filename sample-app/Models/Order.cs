@@ -85,7 +85,7 @@ public class Order
     /// Order total 
     /// </summary>
     [Field] public int Total { get; set; }
-    
+
     /// <summary>
     /// Payment details
     /// </summary>
