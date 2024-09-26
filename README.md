@@ -1,10 +1,10 @@
-# Fauna dotnet sample app
+# Fauna .NET sample app
 
 ## Overview
 
 This sample app shows how to use [Fauna](https://fauna.com) in a production application.
 
-The app uses dotnet and the [Fauna v10 dotnet
+The app uses .NET and the [Fauna v10 .NET
 driver](https://github.com/fauna/fauna-dotnet) to create HTTP API endpoints for an
 e-commerce store. You can use the app's API endpoints to manage products,
 customers, and orders for the store.
@@ -67,7 +67,7 @@ To run the app, you'll need:
 - A [Fauna account](https://dashboard.fauna.com/register). You can sign up for a
   free account at https://dashboard.fauna.com/register.
 
-- dotnet 6.0 or later.
+- .NET 6.0 or later.
 
 - The [Fauna CLI](https://docs.fauna.com/fauna/current/tools/shell/). To install
   the CLI, run:
@@ -83,7 +83,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 
 ## Setup
 
-1. In your terminal, clone the repo and navigate to the `js-sample-app`
+1. In your terminal, clone the repo and navigate to the `dotnet-sample-app`
    directory. For example:
 
     ```sh
@@ -96,7 +96,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
    [`.fauna-project`](https://docs.fauna.com/fauna/current/tools/shell/#proj-config)
    file that contains defaults for the Fauna CLI. The file indicates:
 
-    - `ECommerce` is the default database for the project.
+    - `EcommerceDotnet` is the default database for the project.
 
     - The project stores Fauna Schema Language (FSL) files in the
       `schema` directory.
@@ -112,13 +112,13 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     [Forgot Password](https://dashboard.fauna.com/forgot-password) workflow.
 
 
-3. Use the Fauna CLI to create the `ECommerce` database:
+3. Use the Fauna CLI to create the `EcommerceDotnet` database:
 
     ```sh
-    fauna create-database --environment='' ECommerce
+    fauna create-database --environment='' EcommerceDotnet
     ```
 
-4.  Push the FSL files in the `schema` directory to the `ECommerce`
+4.  Push the FSL files in the `schema` directory to the `EcommerceDotnet`
     database:
 
     ```sh
@@ -129,10 +129,10 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     and user-defined functions (UDFs) defined in the FSL files of the
     `schema` directory.
 
-5. Create a key with the `server` role for the `ECommerce` database:
+5. Create a key with the `server` role for the `EcommerceDotnet` database:
 
     ```sh
-    fauna create-key --environment='' ECommerce server
+    fauna create-key --environment='' EcommerceDotnet server
     ```
 
     Copy the returned `secret`. The app can use the key's secret to authenticate
@@ -156,7 +156,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 
 ## Run the app
 
-The app runs an HTTP API server. From the root directory, run:
+The app runs an HTTP API server. From the `sample-app` directory, run:
 
 ```sh
 dotnet run
@@ -172,11 +172,11 @@ Once started, the local server is available at http://localhost:5049.
 ### Make API requests
 
 You can use the endpoints to make API requests that read and write data from
-the `ECommerce` database.
+the `EcommerceDotnet` database.
 
 For example, with the local server running in a separate terminal tab, run the
 following curl request to the `POST /products` endpoint. The request creates a
-`Product` collection document in the `ECommerce` database.
+`Product` collection document in the `EcommerceDotnet` database.
 
 ```sh
 curl -v \
@@ -191,8 +191,8 @@ curl -v \
   }'
 ```
 
-
-## Expand the app
+<!-- TODO: Uncomment + update after sample data is done. -->
+<!-- ## Expand the app
 
 You can further expand the app by adding fields and endpoints.
 
@@ -227,7 +227,7 @@ Customer documents and related API responses:
 
     Save `schema/collections.fsl`.
 
-3.  Push the updated schema to the `ECommerce` database:
+3.  Push the updated schema to the `EcommerceDotnet` database:
 
     ```sh
     fauna schema push
