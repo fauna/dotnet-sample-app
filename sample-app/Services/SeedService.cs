@@ -14,9 +14,6 @@ public static class SeedService
     /// <param name="client"></param>
     public static void Init(Client client)
     {
-        // Clear Customer History
-        client.QueryAsync(Query.FQL($"Customer.all().forEach(c => c.delete())")).Wait();
-
         // Ensure categories exist
         client.QueryAsync(Query.FQL($$"""
                                       [
@@ -56,10 +53,55 @@ public static class SeedService
                                             category: Category.byName(p.category).first()!
                                           })
                                         }
-                                      }) 
+                                      })
 
                                       // Force empty return
                                       {}
                                       """)).Wait();
+        // Ensure customers exist
+        client.QueryAsync(Query.FQL($$"""
+                                      [{
+                                        id: '999',
+                                        name: 'Valued Customer',
+                                        email: 'fake@fauna.com',
+                                        address: {
+                                          street: '123 Main St',
+                                          city: 'San Francisco',
+                                          state: 'CA',
+                                          postalCode: '12345',
+                                          country: 'United States'
+                                        }
+                                      }].map(c => Customer.byEmail(c.email).first() ?? Customer.create(c))
+
+                                      // Force empty return
+                                      {}
+                                      """)).Wait();
+
+        // Ensure orders exist
+        client.QueryAsync(Query.FQL($$"""
+                                      let customer = Customer.byEmail('fake@fauna.com').first()!
+                                      let orders = ['cart', 'processing', 'shipped', 'delivered'].map(status => {
+                                        let order: Any = Order.byCustomer(customer).firstWhere(o => o.status == status)
+                                        if (order == null) {
+                                          let newOrder: Any = Order.create({
+                                            customer: customer,
+                                            status: status,
+                                            createdAt: Time.now(),
+                                            payment: {}
+                                          })
+                                          let product: Any = Product.byName('Drone').first()!
+                                          let orderItem: Any = OrderItem.create({ order: newOrder, product: product, quantity: 1 })
+                                          orderItem
+                                          newOrder
+                                        } else {
+                                          order
+                                        }
+                                      })
+                                      orders
+
+                                      // Force empty return
+                                      {}
+                                      """)).Wait();
+
     }
 }

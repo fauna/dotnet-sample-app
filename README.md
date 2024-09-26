@@ -185,7 +185,7 @@ The app includes seed data that's populated when you make a successful request t
 
 ## HTTP API endpoints
 
-The app's HTTP API endpoints are defined in the `Controllers` directory.
+The app's HTTP API endpoints are defined in the `sample-app/Controllers` directory.
 
 An OpenAPI spec and Swagger UI docs for the endpoints are available at:
 
@@ -214,19 +214,14 @@ curl -v \
   }' | jq .
 ```
 
-<!-- TODO: Uncomment + update after sample data is done. -->
-<!-- ## Expand the app
+## Expand the app
 
 You can further expand the app by adding fields and endpoints.
 
 As an example, the following steps adds a computed `totalPurchaseAmt` field to
 Customer documents and related API responses:
 
-1. If you haven't already, add the sample data:
-
-    ```sh
-    # TODO
-    ```
+1. If the app server is running, stop the server by pressing Ctrl+C.
 
 2. In `schema/collections.fsl`, add the following `totalPurchaseAmt` computed
   field definition to the `Customer` collection:
@@ -250,44 +245,88 @@ Customer documents and related API responses:
 
     Save `schema/collections.fsl`.
 
-3.  Push the updated schema to the `EcommerceDotnet` database:
+3. In `schema/functions.fsl`, add the `totalPurchaseAmt` field to the
+   `returnCustomer` UDF's projection:
+
+    ```diff
+    ...
+    function returnCustomer(customer: Customer): Any {
+      customer {
+          id,
+          name,
+          email,
+    +     address,
+    +     totalPurchaseAmt
+      }
+    }
+    ...
+    ```
+
+    Save `schema/collections.fsl`.
+
+4.  Push the updated schemas to the `EcommerceDotnet` database:
 
     ```sh
     fauna schema push
     ```
 
-4. In `src/routes/customers/customers.controller.ts`, add the
-   `totalPurchaseAmt` field to the `customerResponse` FQL template:
+    When prompted, accept and push the changes.
+
+5. In `sample-app/Models/Customers.cs`, add the
+   `totalPurchaseAmt` field to the `Customer` class:
 
     ```diff
-    // Project Customer document fields for consistent responses.
-    const customerResponse = fql`
-      customer {
-        id,
-        name,
-        email,
-    +   totalPurchaseAmt,
-        address
-      }
-    `;
+    public class Customer
+    {
+        /// <summary>
+        /// Document ID
+        /// </summary>
+        [Id]
+        public string? Id { get; init; }
+
+        ...
+
+        /// <summary>
+        /// Address
+        /// </summary>
+        [Field]
+        public required Address Address { get; init; }
+
+    +   /// <summary>
+    +   /// Total Purchase Amount
+    +   /// </summary>
+    +   [Field]
+    +   public required int TotalPurchaseAmt { get; init; }
+    }
     ```
 
-    Save `src/routes/customers/customers.controller.ts`.
+    Save `sample-app/Models/Customers.cs`.
 
    Customer-related endpoints use this template to project Customer
    document fields in responses.
 
-5. Start the app server:
+6. Start the app server:
 
     ```sh
    dotnet run
     ```
 
-6. With the local server running in a separate terminal tab, run the
+    If using Docker, run:
+
+    ```sh
+    docker build -t dotnet-sample-app .
+    export $(grep -v '^#' .env | xargs) && \
+    docker run -p 5049:8080 \
+      -e ASPNETCORE_ENVIRONMENT=Development \
+      -e FAUNA_SECRET=$FAUNA_SECRET \
+      dotnet-sample-app
+    ```
+
+7. With the local server running in a separate terminal tab, run the
    following curl request to the `POST /customers` endpoint:
 
     ```sh
-    curl -v http://localhost:5049/customers/999
+    curl -v http://localhost:5049/customers/999 | jq .
     ```
 
     The response includes the computed `totalPurchaseAmt` field:
@@ -296,15 +335,14 @@ Customer documents and related API responses:
     {
       "id": "999",
       "name": "Valued Customer",
-      "email": "valuedcustomer@fauna.com",
-      "totalPurchaseAmt": 27000,
+      "email": "fake@fauna.com",
       "address": {
         "street": "123 Main St",
         "city": "San Francisco",
         "state": "CA",
         "postalCode": "12345",
         "country": "United States"
-      }
+      },
+      "totalPurchaseAmt": 36000
     }
     ```
- -->
