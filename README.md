@@ -133,18 +133,32 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     * `EcommerceDotnet` as the database.
 
 
-5.  Push the FSL files in the `schema` directory to the `EcommerceDotnet`
-    database without staging:
+5.  Push the `.fsl` files in the `schema` directory to the `EcommerceDotnet`
+    database:
 
     ```sh
-    fauna schema push --active
+    fauna schema push
     ```
 
-    When prompted, accept and push the changes. The push creates the collections
-    and user-defined functions (UDFs) defined in the FSL files of the `schema`
-    directory.
+    When prompted, accept and stage the schema.
 
-6. Create a key with the `server` role for the `EcommerceDotnet` database:
+6.  Check the status of the staged schema:
+
+    ```sh
+    fauna schema status
+    ```
+
+7.  When the status is `ready`, commit the staged schema to the database:
+
+    ```sh
+    fauna schema commit
+    ```
+
+    The commit applies the staged schema to the database. The commit creates the
+    collections and user-defined functions (UDFs) defined in the `.fsl` files of the
+    `schema` directory.
+
+8. Create a key with the `server` role for the `EcommerceDotnet` database:
 
     ```sh
     fauna create-key --environment='' EcommerceDotnet server
@@ -153,13 +167,13 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     Copy the returned `secret`. The app can use the key's secret to authenticate
     requests to the database.
 
-7. Make a copy of the `.env.example` file and name the copy `.env`. For example:
+9.  Make a copy of the `.env.example` file and name the copy `.env`. For example:
 
     ```sh
     cp .env.example .env
     ```
 
-8.  In `.env`, set the `FAUNA_SECRET` environment variable to the secret you
+10. In `.env`, set the `FAUNA_SECRET` environment variable to the secret you
     copied earlier:
 
     ```
@@ -279,15 +293,30 @@ Customer documents and related API responses:
 
     Save `schema/collections.fsl`.
 
-4.  Push the updated schemas to the `EcommerceDotnet` database:
+
+4.  Push the updated `.fsl` files in the `schema` directory to the `EcommerceDotnet`
+    database to stage the changes:
 
     ```sh
-    fauna schema push --active
+    fauna schema push
     ```
 
-    When prompted, accept and push the changes.
+    When prompted, accept and stage the schema.
 
-5. In `sample-app/Models/Customers.cs`, add the
+6.  Check the status of the staged schema:
+
+    ```sh
+    fauna schema status
+    ```
+
+7.  When the status is `ready`, commit the staged schema changes to the
+    database:
+
+    ```sh
+    fauna schema commit
+    ```
+
+8. In `sample-app/Models/Customers.cs`, add the
    `totalPurchaseAmt` field to the `Customer` class:
 
     ```diff
@@ -320,7 +349,7 @@ Customer documents and related API responses:
    Customer-related endpoints use this template to project Customer
    document fields in responses.
 
-6. Start the app server:
+9. Start the app server:
 
     ```sh
    dotnet run
@@ -337,7 +366,7 @@ Customer documents and related API responses:
       dotnet-sample-app
     ```
 
-7. With the local server running in a separate terminal tab, run the
+10. With the local server running in a separate terminal tab, run the
    following curl request to the `POST /customers` endpoint:
 
     ```sh
