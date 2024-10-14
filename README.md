@@ -303,20 +303,20 @@ Customer documents and related API responses:
 
     When prompted, accept and stage the schema.
 
-6.  Check the status of the staged schema:
+5.  Check the status of the staged schema:
 
     ```sh
     fauna schema status
     ```
 
-7.  When the status is `ready`, commit the staged schema changes to the
+6.  When the status is `ready`, commit the staged schema changes to the
     database:
 
     ```sh
     fauna schema commit
     ```
 
-8. In `sample-app/Models/Customers.cs`, add the
+7. In `sample-app/Models/Customers.cs`, add the
    `totalPurchaseAmt` field to the `Customer` class:
 
     ```diff
@@ -349,7 +349,7 @@ Customer documents and related API responses:
    Customer-related endpoints use this template to project Customer
    document fields in responses.
 
-9. Start the app server:
+8. Start the app server:
 
     ```sh
    dotnet run
@@ -366,7 +366,7 @@ Customer documents and related API responses:
       dotnet-sample-app
     ```
 
-10. With the local server running in a separate terminal tab, run the
+9. With the local server running in a separate terminal tab, run the
    following curl request to the `POST /customers` endpoint:
 
     ```sh
