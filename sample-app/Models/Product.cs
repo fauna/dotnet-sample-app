@@ -1,6 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
 using Fauna.Mapping;
+using Fauna.Types;
 
-namespace dotnet_sample_app.Models;
+namespace DotNetSampleApp.Models;
 
 /// <summary>
 /// Create Product request details
@@ -41,8 +43,9 @@ public class Category
     /// <summary>
     /// Document ID
     /// </summary>
-    [Field]
-    public string Id { get; set; } = null!;
+    [Id]
+    [AllowNull]
+    public string Id { get; set; }
 
     /// <summary>
     /// 
@@ -66,7 +69,8 @@ public class Product
     /// Document ID
     /// </summary>
     [Id]
-    public string Id { get; init; } = null!;
+    [AllowNull]
+    public string Id { get; init; }
 
     /// <summary>
     /// Name

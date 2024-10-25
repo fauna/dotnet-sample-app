@@ -6,6 +6,9 @@ project.lock.json
 nupkg/
 .env
 
+# Fauna
+.fauna-project
+
 # Visual Studio Code
 .vscode
 

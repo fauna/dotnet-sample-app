@@ -1,6 +1,6 @@
 using System.Reflection;
-using dotnet_sample_app.Middlewares;
-using dotnet_sample_app.Services;
+using DotNetSampleApp.Middlewares;
+using DotNetSampleApp.Services;
 using Fauna;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;

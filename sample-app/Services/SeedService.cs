@@ -1,7 +1,6 @@
-using System.Diagnostics;
 using Fauna;
 
-namespace dotnet_sample_app.Services;
+namespace DotNetSampleApp.Services;
 
 /// <summary>
 /// Creates seed data

@@ -117,7 +117,7 @@ Content-Type: application/json
 %}
 
 ### Update Product
-PATCH {{host}}/products/{{productId}}
+POST {{host}}/products/{{productId}}
 Accept: application/json
 Content-Type: application/json
 
@@ -213,7 +213,7 @@ Content-Type: application/json
 
 ### Update Customer
 
-PATCH {{host}}/customers/{{customerId}}
+POST {{host}}/customers/{{customerId}}
 Accept: application/json
 Content-Type: application/json
 
@@ -357,7 +357,7 @@ Content-Type: application/json
 %}
 
 ### Update Order
-PATCH {{host}}/orders/{{cartId}}
+POST {{host}}/orders/{{cartId}}
 Accept: application/json
 Content-Type: application/json
 
