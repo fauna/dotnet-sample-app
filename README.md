@@ -310,7 +310,7 @@ Customer documents and related API responses:
     fauna schema commit
     ```
 
-7. In `sample-app/Models/Customers.cs`, add the
+7. In `sample-app/Models/Customer.cs`, add the
    `totalPurchaseAmt` field to the `Customer` class:
 
     ```diff
@@ -338,7 +338,7 @@ Customer documents and related API responses:
     }
     ```
 
-    Save `sample-app/Models/Customers.cs`.
+    Save `sample-app/Models/Customer.cs`.
 
    Customer-related endpoints use this template to project Customer
    document fields in responses.
