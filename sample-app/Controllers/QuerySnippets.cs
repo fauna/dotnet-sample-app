@@ -19,8 +19,7 @@ public static class QuerySnippets
                          id,
                          name,
                          email,
-                         address,
-                         totalPurchaseAmt
+                         address
                        }
                        """);
   }

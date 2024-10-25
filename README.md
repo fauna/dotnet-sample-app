@@ -274,8 +274,8 @@ Customer documents and related API responses:
 
     Save `schema/collections.fsl`.
 
-3. In `Controllers/Utils`, add the `totalPurchaseAmt` field to the
-   `CustomerResponse`projection:
+3. In `sample-app/Controllers/QuerySnippets.cs`, add the `totalPurchaseAmt` field to the
+   `CustomerResponse` method's projection:
 
     ```diff
     ...

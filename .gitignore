@@ -8,6 +8,7 @@ nupkg/
 
 # Fauna
 .fauna-project
+fauna-dotnet/
 
 # Visual Studio Code
 .vscode
