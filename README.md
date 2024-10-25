@@ -113,7 +113,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 3. Use the Fauna CLI to create the `EcommerceDotnet` database:
 
     ```sh
-    fauna create-database --environment='' EcommerceDotnet
+    fauna create-database EcommerceDotnet
     ```
 
 4. Create a
