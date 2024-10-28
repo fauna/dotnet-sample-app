@@ -1,9 +1,8 @@
-using dotnet_sample_app.Models;
-using dotnet_sample_app.Repositories;
+using DotNetSampleApp.Models;
 using Fauna;
 using Microsoft.AspNetCore.Mvc;
 
-namespace dotnet_sample_app.Controllers;
+namespace DotNetSampleApp.Controllers;
 
 /// <summary>
 /// Orders Controller
@@ -13,9 +12,6 @@ namespace dotnet_sample_app.Controllers;
  Route("/[controller]")]
 public class Orders(Client client) : ControllerBase
 {
-
-
-    private readonly OrderDb _orderDb = client.DataContext<OrderDb>();
 
     /// <summary>
     /// Retrieves an order by its ID.
@@ -29,7 +25,15 @@ public class Orders(Client client) : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOrder([FromRoute] string id)
     {
-        return Ok(await _orderDb.Get(id));
+        var query = Query.FQL($"""
+                                let order: Any = Order.byId({id})!
+                                {QuerySnippets.OrderResponse()}
+                                """);
+        
+        // Connect to fauna using the client. The query method accepts an FQL query
+        // as a parameter and a generic type parameter representing the return type.
+        var res = await client.QueryAsync<Order>(query);
+        return StatusCode(StatusCodes.Status201Created, res.Data);
     }
 
 
@@ -43,29 +47,50 @@ public class Orders(Client client) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [HttpPatch("{id}")]
+    [HttpPost("{id}")]
     public async Task<IActionResult> UpdateOrder(
         [FromRoute] string id,
         OrderRequest order
     )
     {
-        return Ok(await _orderDb.Update(id, order));
-    }
+        // If the new order status is "processing" call the checkout UDF to process the checkout. The checkout
+        // function definition can be found in 'server/schema/functions.fsl'. It is responsible
+        // for validating that the order in a valid state to be processed and decrements the stock
+        // of each product in the order. This ensures that the product stock is updated in the same transaction
+        // as the order status.
+        var query = order.Status == "processing" 
+            ? Query.FQL($"""
+                      let req = {order}
+                      let order: Any = checkout({id}, req.status, req.payment)
+                      {QuerySnippets.OrderResponse()}
+                      """)
+            
+            // Define an FQL query to update the order. The query first retrieves the order by id
+            // using the Order.byId function. If the order does not exist, Fauna will throw a document_not_found
+            // error. We then use the validateOrderStatusTransition UDF to ensure that the order status transition
+            // is valid. If the transition is not valid, the UDF will throw an abort error.
+            : Query.FQL($$"""
+                        let order: Any = Order.byId({{id}})!
+                        let req = {{order}}
 
-    /// <summary>
-    /// Get Completed Orders
-    /// </summary>
-    /// <returns></returns>
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [HttpGet("list")]
-    public async Task<IActionResult> ListOrders()
-    {
-        return Ok(await _orderDb.Orders.Select(o => new
-        {
-            id = o.Id,
-            status = o.Status,
-            total = o.Total
-        }).ToListAsync());
+                        // Validate the order status transition if a status is provided.
+                        if (req.status != null) {
+                          validateOrderStatusTransition(order!.status, req.status)
+                        }
+
+                        // If the order status is not "cart" and a payment is provided, throw an error.
+                        if (order!.status != "cart" && req.payment != null) {
+                          abort("Can not update payment information after an order has been placed.")
+                        }
+
+                        // Update the order with the new status and payment information.
+                        order.update(req)
+
+                        // Return the order.
+                        {{QuerySnippets.OrderResponse()}}
+                        """);
+
+        var res = await client.QueryAsync<Order>(query);
+        return Ok(res.Data);
     }
 }

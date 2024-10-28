@@ -88,7 +88,6 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     ```sh
     git clone git@github.com:fauna/dotnet-sample-app.git
     cd dotnet-sample-app
-    git submodule init && git submodule update
     ```
 
 2. Log in to Fauna using the Fauna CLI:
@@ -114,7 +113,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 3. Use the Fauna CLI to create the `EcommerceDotnet` database:
 
     ```sh
-    fauna create-database --environment='' EcommerceDotnet
+    fauna create-database EcommerceDotnet
     ```
 
 4. Create a
@@ -188,7 +187,8 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 The app runs an HTTP API server. From the `sample-app` directory, run:
 
 ```sh
-dotnet run
+export $(grep -v '^#' .env | xargs) && \
+FAUNA_SECRET=$FAUNA_SECRET dotnet run
 ```
 
 Once started, the local server is available at http://localhost:5049.
@@ -274,28 +274,22 @@ Customer documents and related API responses:
 
     Save `schema/collections.fsl`.
 
-3. In `schema/functions.fsl`, add the `totalPurchaseAmt` field to the
-   `returnCustomer` UDF's projection:
+3. In `sample-app/Controllers/QuerySnippets.cs`, add the `totalPurchaseAmt` field to the
+   `CustomerResponse` method's projection:
 
     ```diff
     ...
-    function returnCustomer(customer: Customer): Any {
-      customer {
-          id,
-          name,
-          email,
-    +     address,
-    +     totalPurchaseAmt
-      }
+    customer {
+        id,
+        name,
+        email,
+    +   address,
+    +   totalPurchaseAmt
     }
     ...
     ```
 
-    Save `schema/collections.fsl`.
-
-
-4.  Push the updated `.fsl` files in the `schema` directory to the `EcommerceDotnet`
-    database to stage the changes:
+4.  Push the updated schema to the `EcommerceDotnet` database:
 
     ```sh
     fauna schema push
@@ -316,7 +310,7 @@ Customer documents and related API responses:
     fauna schema commit
     ```
 
-7. In `sample-app/Models/Customers.cs`, add the
+7. In `sample-app/Models/Customer.cs`, add the
    `totalPurchaseAmt` field to the `Customer` class:
 
     ```diff
@@ -344,7 +338,7 @@ Customer documents and related API responses:
     }
     ```
 
-    Save `sample-app/Models/Customers.cs`.
+    Save `sample-app/Models/Customer.cs`.
 
    Customer-related endpoints use this template to project Customer
    document fields in responses.
@@ -352,7 +346,8 @@ Customer documents and related API responses:
 8. Start the app server:
 
     ```sh
-   dotnet run
+    export $(grep -v '^#' .env | xargs) && \
+    FAUNA_SECRET=$FAUNA_SECRET dotnet run
     ```
 
     If using Docker, run:

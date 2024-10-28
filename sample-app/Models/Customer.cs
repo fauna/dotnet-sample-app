@@ -1,7 +1,6 @@
 using Fauna.Mapping;
-using Fauna.Types;
 
-namespace dotnet_sample_app.Models;
+namespace DotNetSampleApp.Models;
 
 /// <summary>
 /// Customer Address

@@ -6,6 +6,10 @@ project.lock.json
 nupkg/
 .env
 
+# Fauna
+.fauna-project
+fauna-dotnet/
+
 # Visual Studio Code
 .vscode
 

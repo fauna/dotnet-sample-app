@@ -1,6 +1,6 @@
 using Fauna.Exceptions;
 
-namespace dotnet_sample_app.Middlewares;
+namespace DotNetSampleApp.Middlewares;
 
 /// <summary>
 /// Exception handling middleware

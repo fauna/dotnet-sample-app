@@ -1,6 +1,7 @@
 using Fauna.Mapping;
+using Fauna.Types;
 
-namespace dotnet_sample_app.Models;
+namespace DotNetSampleApp.Models;
 
 /// <summary>
 /// Order Request
@@ -38,7 +39,7 @@ public class AddItemToCartRequest
 /// <summary>
 /// Item Details
 /// </summary>
-public class Item
+public class OrderItemByOrderResult
 {
     /// <summary>
     /// Product
@@ -64,7 +65,7 @@ public class Order
     /// <summary>
     /// Created At
     /// </summary>
-    [Ts] public DateTime CreatedAt { get; set; }
+    [Field] public DateTime CreatedAt { get; set; }
 
     /// <summary>
     /// Customer Details
@@ -74,7 +75,7 @@ public class Order
     /// <summary>
     /// Items Ordered
     /// </summary>
-    [Field] public required List<Item> Items { get; set; }
+    [Field] public required List<OrderItemByOrderResult> Items { get; set; }
 
     /// <summary>
     /// Order status
@@ -105,6 +106,6 @@ public class Cart
     /// <summary>
     /// Items in the Cart
     /// </summary>
-    [Field] public List<Item> Items { get; set; } = [];
+    [Field] public List<OrderItemByOrderResult> Items { get; set; } = [];
 }
 
