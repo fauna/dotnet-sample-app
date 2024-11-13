@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSampleApp", "sample-app\DotNetSampleApp.csproj", "{9EB6EE06-4E63-4511-852E-48AA0A9EFB21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSampleApp", "DotNetSampleApp\DotNetSampleApp.csproj", "{9EB6EE06-4E63-4511-852E-48AA0A9EFB21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,5 +22,9 @@ Global
 		{FAAE672B-E9CD-4B7C-98DD-1CE95B1DF0AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAAE672B-E9CD-4B7C-98DD-1CE95B1DF0AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAAE672B-E9CD-4B7C-98DD-1CE95B1DF0AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9589AB7B-32EE-4079-BE5C-04F40D34E18A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9589AB7B-32EE-4079-BE5C-04F40D34E18A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9589AB7B-32EE-4079-BE5C-04F40D34E18A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9589AB7B-32EE-4079-BE5C-04F40D34E18A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
