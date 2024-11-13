@@ -1,0 +1,49 @@
+name: Sample App Tests
+
+on:
+  pull_request:
+    paths:
+      - '**/*.cs'
+      - '**/*.csproj'
+      - '**/*.sln'
+jobs:
+  dotnet-test:
+
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        dotnet-version: [ '8.0.x' ]
+
+    services:
+      fauna:
+        image: fauna/faunadb
+        ports:
+          - 8443:8443
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install Fauna CLI
+        run: npm install -g fauna-shell
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Push Schema and Test
+        run: |    
+          fauna create-database --url=http://localhost:8443 --secret=secret ECommerceDotnet
+          FAUNA_SECRET=$(fauna create-key --url=http://localhost:8443 --secret=secret ECommerceDotnet | grep secret: | awk '{print $2}')
+          cat << EOF > .fauna-project
+          schema_directory=schema
+          default=local
+          
+          [environment.local]
+          endpoint=local
+          database=ECommerceDotnet
+          EOF
+          fauna schema push -y --url=http://localhost:8443 --secret=$FAUNA_SECRET
+          fauna schema commit -y --url=http://localhost:8443 --secret=$FAUNA_SECRET
+          FAUNA_SECRET=$FAUNA_SECRET dotnet test --no-build --verbosity normal

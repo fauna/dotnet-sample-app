@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSampleApp", "DotNetSampleApp\DotNetSampleApp.csproj", "{9EB6EE06-4E63-4511-852E-48AA0A9EFB21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSampleApp.Tests", "DotNetSampleApp.Tests\DotNetSampleApp.Tests.csproj", "{9589AB7B-32EE-4079-BE5C-04F40D34E18A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
