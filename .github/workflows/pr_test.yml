@@ -28,6 +28,21 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install Fauna CLI
         run: npm install -g fauna-shell
+      - name: Push schema
+        run: |
+          cat << EOF > .fauna-project
+          schema_directory=schema
+          default=local
+          
+          [environment.local]
+          endpoint=local
+          database=EcommerceDotnet
+          EOF
+          cat .fauna-project
+          
+          fauna create-database --url=http://localhost:8443 --secret=secret ECommerceDotnet
+          fauna create-key --environment='' --url=http://localhost:8443 --secret=secret EcommerceDotnet server
+          fauna schema push -y --url=http://localhost:8443 --secret=secret
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
