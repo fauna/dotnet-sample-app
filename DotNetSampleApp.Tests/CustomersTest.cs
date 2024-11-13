@@ -21,7 +21,7 @@ public class CustomersTest
     [OneTimeSetUp]
     public void Setup()
     {
-        _fauna = new Client(new Configuration("secret")
+        _fauna = new Client(new Configuration(TestSetup.Secret)
         {
             Endpoint = new Uri("http://localhost:8443"),
         });
