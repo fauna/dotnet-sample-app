@@ -13,19 +13,12 @@ namespace DotNetSampleApp.Tests;
 public class CustomersTest
 {
     [AllowNull]
-    private Client _fauna;
-
-    [AllowNull]
     private Customers _cust;
 
     [OneTimeSetUp]
     public void Setup()
     {
-        _fauna = new Client(new Configuration(TestSetup.Secret)
-        {
-            Endpoint = new Uri("http://localhost:8443"),
-        });
-        _cust = new Customers(_fauna);
+        _cust = new Customers(TestSetup.Client);
     }
     
     [Test]
