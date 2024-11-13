@@ -1,0 +1,36 @@
+name: Sample App Tests
+
+on:
+  pull_request:
+    paths:
+      - '**/*.cs'
+      - '**/*.csproj'
+      - '**/*.sln'
+jobs:
+  dotnet-test:
+
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        dotnet-version: [ '8.0.x' ]
+
+    services:
+      fauna:
+        image: fauna/faunadb
+        ports:
+          - 8443:8443
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install Fauna CLI
+        run: npm install -g fauna-shell
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal

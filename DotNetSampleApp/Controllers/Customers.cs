@@ -59,7 +59,7 @@ public class Customers(Client client) : ControllerBase
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Customer>(query);
-        return StatusCode(StatusCodes.Status201Created, res.Data);
+        return CreatedAtAction(nameof(GetCustomer), new { customerId = res.Data.Id }, res.Data);
     }
     
     /// <summary>
@@ -92,7 +92,7 @@ public class Customers(Client client) : ControllerBase
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Customer>(query);
-        return StatusCode(StatusCodes.Status201Created, res.Data);
+        return Ok(res.Data);
     }
 
     /// <summary>
@@ -125,14 +125,14 @@ public class Customers(Client client) : ControllerBase
             // If the document does not exist, Fauna will throw a document_not_found error. We then
             // use the Order.byCustomer index to retrieve all orders for that customer and map over
             // the results to return only the fields we care about.
-            : Query.FQL(@$"""
-                let customer: Any = Customer.byId({customerId})!
-                Order.byCustomer(customer).pageSize({pageSize}).map((order) => {{
+            : Query.FQL($$"""
+                let customer: Any = Customer.byId({{customerId}})!
+                Order.byCustomer(customer).pageSize({{pageSize}}).map((order) => {
                   let order: Any = order
 
                   // Return the order.
-                  {QuerySnippets.OrderResponse()}
-                }})
+                  {{QuerySnippets.OrderResponse()}}
+                })
                 """);
         
         // Connect to fauna using the client. The query method accepts an FQL query
@@ -165,7 +165,7 @@ public class Customers(Client client) : ControllerBase
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Order>(query);
-        return StatusCode(StatusCodes.Status201Created, res.Data);
+        return CreatedAtAction(nameof(GetCart), new { customerId }, res.Data);
     }
 
     /// <summary>
@@ -174,7 +174,7 @@ public class Customers(Client client) : ControllerBase
     /// <param name="customerId">Customer ID</param>
     /// <param name="item">Item details</param>
     /// <returns>Cart Details</returns>
-    [ProducesResponseType(typeof(Cart), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpPost("{customerId}/cart/item")]
@@ -193,7 +193,7 @@ public class Customers(Client client) : ControllerBase
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Order>(query);
-        return StatusCode(StatusCodes.Status201Created, res.Data);
+        return Ok(res.Data);
     }
 
     /// <summary>
@@ -201,7 +201,7 @@ public class Customers(Client client) : ControllerBase
     /// </summary>
     /// <param name="customerId">Customer ID</param>
     /// <returns>Cart Details</returns>
-    [ProducesResponseType(typeof(Cart), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpGet("{customerId}/cart")]
@@ -219,6 +219,6 @@ public class Customers(Client client) : ControllerBase
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Order>(query);
-        return StatusCode(StatusCodes.Status201Created, res.Data);
+        return Ok(res.Data);
     }
 }
