@@ -15,6 +15,8 @@ public static class SeedService
     {
         // Clear Customer History
         client.QueryAsync(Query.FQL($"Customer.all().forEach(c => c.delete())")).Wait();
+        client.QueryAsync(Query.FQL($"Product.all().forEach(c => c.delete())")).Wait();
+        client.QueryAsync(Query.FQL($"Order.all().forEach(c => c.delete())")).Wait();
 
         // Ensure categories exist
         client.QueryAsync(Query.FQL($$"""
@@ -34,7 +36,7 @@ public static class SeedService
         client.QueryAsync(Query.FQL($$"""
                                       [
                                         {name: 'iPhone', price: 10000, description: 'Apple flagship phone', stock: 100, category: 'electronics'},
-                                        {name: 'Drone', price: 9000, description: 'Fly and let people wonder if you are filming them!', stock: 0, category: 'electronics'},
+                                        {name: 'Drone', price: 9000, description: 'Fly and let people wonder if you are filming them!', stock: 1, category: 'electronics'},
                                         {name: 'Signature Box III', price: 300000, description: 'Latest box by Hooli!', stock: 1000, category: 'electronics'},
                                         {name: 'Raspberry Pi', price: 3000, description: 'A tiny computer', stock: 5, category: 'electronics'},
                                         {name: 'For Whom the Bell Tolls', price: 899, description: 'A book by Ernest Hemingway', stock: 10, category: 'books'},

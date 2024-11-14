@@ -33,7 +33,7 @@ public class Orders(Client client) : ControllerBase
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Order>(query);
-        return StatusCode(StatusCodes.Status201Created, res.Data);
+        return Ok(res.Data);
     }
 
 
