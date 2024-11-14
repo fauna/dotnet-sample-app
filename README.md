@@ -386,3 +386,10 @@ Customer documents and related API responses:
       "totalPurchaseAmt": 36000
     }
     ```
+## Development
+
+### Local Testing
+1. Install the latest Fauna CLI: `npm install -g fauna-shell`
+2. Start Fauna in a container: `docker run --rm --name fauna -p 8443:8443 -p 8084:8084 fauna/faunadb`
+3. Configure the schema: `./setup-local.sh`
+4. Run tests: `dotnet test`

@@ -8,6 +8,7 @@ namespace DotNetSampleApp.Tests;
 public class TestSetup
 {
     public static string Secret = "";
+    public static Client Client = null!;
     
     [OneTimeSetUp]
     public void SetupOnce()
@@ -28,11 +29,12 @@ public class TestSetup
             Secret = Environment.GetEnvironmentVariable("FAUNA_SECRET")!;
         }
         
-        var client = new Client(new Configuration(Secret)
+        Client = new Client(new Configuration(Secret)
         {
             Endpoint = new Uri("http://localhost:8443"),
         });
-        SeedService.Init(client);
+        
+        SeedService.Init(Client);
     }
 
 }
