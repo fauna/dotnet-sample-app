@@ -169,7 +169,7 @@ public class Products(Client client) : ControllerBase
     /// <param name="minPrice">Minimum price for filtering products (default is 0).</param>
     /// <param name="maxPrice">Maximum price for filtering products (default is 1000).</param>
     /// <returns>List of filtered and sorted products.</returns>
-    [ProducesResponseType(typeof(List<Product>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Page<Product>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpGet("search")]
