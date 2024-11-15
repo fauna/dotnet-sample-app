@@ -15,8 +15,9 @@ public class TestSetup
     {
         if (Environment.GetEnvironmentVariable("FAUNA_SECRET") == null)
         {
-            var c = new Client(new Configuration("secret")
+            var c = new Client(new Configuration
             {
+                Secret = "secret",
                 Endpoint = new Uri("http://localhost:8443"),
             });
             Secret = c.QueryAsync<string>(Query.FQL($$"""
@@ -29,8 +30,9 @@ public class TestSetup
             Secret = Environment.GetEnvironmentVariable("FAUNA_SECRET")!;
         }
         
-        Client = new Client(new Configuration(Secret)
+        Client = new Client(new Configuration
         {
+            Secret = Secret,
             Endpoint = new Uri("http://localhost:8443"),
         });
         
