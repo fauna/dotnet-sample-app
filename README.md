@@ -67,7 +67,7 @@ To run the app, you'll need:
 - A [Fauna account](https://dashboard.fauna.com/register). You can sign up for a
   free account at https://dashboard.fauna.com/register.
 
-- .NET 6.0 or later.
+- .NET 8.0 or later.
 
 - [Fauna CLI](https://docs.fauna.com/fauna/current/tools/shell/) v3.0.0 or later.
 
