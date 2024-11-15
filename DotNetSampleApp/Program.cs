@@ -17,13 +17,7 @@ builder.Services.AddControllers(options =>
 
 builder.Services.AddSingleton<Client>(_ =>
 {
-    var secret = Environment.GetEnvironmentVariable("FAUNA_SECRET");
-    if (string.IsNullOrEmpty(secret))
-    {
-        throw new InvalidOperationException("Required environment variable not set: FAUNA_SECRET");
-    }
-
-    var client = new Client(secret);
+    var client = new Client();
     SeedService.Init(client);
 
     return client;

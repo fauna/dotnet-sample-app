@@ -393,3 +393,10 @@ Customer documents and related API responses:
 2. Start Fauna in a container: `docker run --rm --name fauna -p 8443:8443 -p 8084:8084 fauna/faunadb`
 3. Configure the schema: `./setup-local.sh`
 4. Run tests: `dotnet test`
+
+### dotnet run with local Fauna
+1. Start Fauna in a container: `docker run --rm --name fauna -p 8443:8443 -p 8084:8084 fauna/faunadb`
+2. Configure the schema: `./setup-local.sh`
+2. Copy the secret returned from running `./setup-local.sh`
+2. `cd DotNetSampleApp`
+3. `FAUNA_SECRET="<SECRET>" FAUNA_ENDPOINT="http://localhost:8443" dotnet run`
