@@ -26,10 +26,10 @@ public class Orders(Client client) : ControllerBase
     public async Task<IActionResult> GetOrder([FromRoute] string id)
     {
         var query = Query.FQL($"""
-                                let order: Any = Order.byId({id})!
+                                let order = Order.byId({id})!
                                 {QuerySnippets.OrderResponse()}
                                 """);
-        
+
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Order>(query);
@@ -58,19 +58,19 @@ public class Orders(Client client) : ControllerBase
         // for validating that the order in a valid state to be processed and decrements the stock
         // of each product in the order. This ensures that the product stock is updated in the same transaction
         // as the order status.
-        var query = order.Status == "processing" 
+        var query = order.Status == "processing"
             ? Query.FQL($"""
                       let req = {order}
-                      let order: Any = checkout({id}, req.status, req.payment)
+                      let order = checkout({id}, req.status, req.payment)
                       {QuerySnippets.OrderResponse()}
                       """)
-            
+
             // Define an FQL query to update the order. The query first retrieves the order by id
             // using the Order.byId function. If the order does not exist, Fauna will throw a document_not_found
             // error. We then use the validateOrderStatusTransition UDF to ensure that the order status transition
             // is valid. If the transition is not valid, the UDF will throw an abort error.
             : Query.FQL($$"""
-                        let order: Any = Order.byId({{id}})!
+                        let order = Order.byId({{id}})!
                         let req = {{order}}
 
                         // Validate the order status transition if a status is provided.
