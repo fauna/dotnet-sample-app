@@ -36,24 +36,24 @@ public class Products(Client client) : ControllerBase
         // fragment will either return all products sorted by category or all products in a specific
         // category depending on whether the category query parameter is provided. This will later
         // be embedded in a larger query.
-         var queryPrefix = string.IsNullOrEmpty(category) 
-             ? Query.FQL($"Product.sortedByCategory().pageSize({pageSize})") 
+         var queryPrefix = string.IsNullOrEmpty(category)
+             ? Query.FQL($"Product.sortedByCategory().pageSize({pageSize})")
              : Query.FQL($"""
                           let category = Category.byName({category}).first()
                           if (category == null) abort("Category does not exist.")
-                          
+
                           Product.byCategory(category).pageSize({pageSize})
                           """);
-         
+
          // The `afterToken` parameter contains a Fauna `after` cursor.
          // `after` cursors may contain special characters, such as `.` or `+`).
          // Make sure to URL encode the `afterToken` value to preserve these
          // characters in URLs.
-         var query = !string.IsNullOrEmpty(afterToken) 
-             
+         var query = !string.IsNullOrEmpty(afterToken)
+
              // Paginate with the after token if it's present.
              ? Query.FQL($"Set.paginate({afterToken})")
-             
+
              // Define the main query. This query will return a page of products using the query fragment
              // defined above.
              : Query.FQL($$"""
@@ -90,17 +90,17 @@ public class Products(Client client) : ControllerBase
                                 if (category == null) abort("Category does not exist.")
 
                                 // Create the product with the given values.
-                                let args = { 
+                                let args = {
                                      name: {{product.Name}},
                                      price: {{product.Price}},
                                      stock: {{product.Stock}},
                                      description: {{product.Description}},
-                                     category: category 
+                                     category: category
                                 }
-                                let product: Any = Product.create(args)
+                                let product = Product.create(args)
                                 {{QuerySnippets.ProductResponse()}}
                                 """);
-        
+
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var result = await client.QueryAsync<Product>(query);
@@ -125,7 +125,7 @@ public class Products(Client client) : ControllerBase
        var query = Query.FQL($$"""
                                 // Get the product by id, using the ! operator to assert that the product exists.
                                 // If it does not exist Fauna will throw a document_not_found error.
-                                let product: Any = Product.byId({{id}})!
+                                let product = Product.byId({{id}})!
                                 if (product == null) abort("Product does not exist.")
 
                                 // Get the category by name. We can use .first() here because we know that the category
@@ -134,7 +134,7 @@ public class Products(Client client) : ControllerBase
                                 if (category == null) abort("Category does not exist.")
 
                                 // Update category if a new one was provided
-                                let newCategory: Any = Category.byName({{product.Category}})?.first()
+                                let newCategory = Category.byName({{product.Category}})?.first()
 
                                 let fields = {
                                     name: {{product.Name}},
@@ -154,7 +154,7 @@ public class Products(Client client) : ControllerBase
 
                                 {{QuerySnippets.ProductResponse()}}
                                 """);
-       
+
        // Connect to fauna using the client. The query method accepts an FQL query
        // as a parameter and a generic type parameter representing the return type.
         var result = await client.QueryAsync<Product>(query);
@@ -185,10 +185,10 @@ public class Products(Client client) : ControllerBase
         // Make sure to URL encode the `afterToken` value to preserve these
         // characters in URLs.
         var query = !string.IsNullOrEmpty(afterToken)
-        
+
             // Paginate with the after token if it's present.
             ? Query.FQL($"Set.paginate({afterToken})")
-            
+
             // This is an example of a covered query.  A covered query is a query where all fields
             // returned are indexed fields. In this case, we are querying the Product collection
             // for products with a price between minPrice and maxPrice. We are also limiting the
@@ -204,7 +204,7 @@ public class Products(Client client) : ControllerBase
                               {{QuerySnippets.ProductResponse()}}
                             })
                           """);
-        
+
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var result = await client.QueryAsync<Page<Product>>(query);

@@ -8,7 +8,7 @@ namespace DotNetSampleApp.Controllers;
 public static class QuerySnippets
 {
   /// <summary>
-  /// A Query snippet for customer response projection. 
+  /// A Query snippet for customer response projection.
   /// </summary>
   /// <returns></returns>
   public static Query CustomerResponse()
@@ -25,11 +25,11 @@ public static class QuerySnippets
   }
 
   /// <summary>
-  /// A Query snippet for order response projection. 
+  /// A Query snippet for order response projection.
   /// </summary>
   /// <returns></returns>
   public static Query OrderResponse()
-  { 
+  {
     return Query.FQL($$"""
                        {
                          id: order.id,
@@ -63,7 +63,7 @@ public static class QuerySnippets
   }
 
   /// <summary>
-  /// A Query snippet for product response projection. 
+  /// A Query snippet for product response projection.
   /// </summary>
   /// <returns></returns>
   public static Query ProductResponse()
@@ -71,7 +71,6 @@ public static class QuerySnippets
     return Query.FQL($$"""
                        // Use projection to return only the necessary fields.
                        let product: Any = product
-                       let category: Any = product.category
                        product {
                            id: product.id,
                            name: product.name,
@@ -79,9 +78,9 @@ public static class QuerySnippets
                            description: product.description,
                            stock: product.stock,
                            category: {
-                               id: category.id,
-                               name: category.name,
-                               description: category.description 
+                               id: product.category.id,
+                               name: product.category.name,
+                               description: product.category.description
                            },
                        }
                        """);

@@ -45,7 +45,7 @@ public static class SeedService
                                         {name: 'The Godfather II', price: 1299, description: 'A movie by Francis Ford Coppola', stock: 10, category: 'movies'},
                                         {name: 'The Godfather III', price: 1299, description: 'A movie by Francis Ford Coppola', stock: 10, category: 'movies'}
                                       ].map(p => {
-                                        let existing: Any = Product.byName(p.name).first()
+                                        let existing = Product.byName(p.name).first()
                                         if (existing != null) {
                                           existing!.update({ stock: p.stock })
                                         } else {
@@ -85,16 +85,16 @@ public static class SeedService
         client.QueryAsync(Query.FQL($$"""
                                       let customer = Customer.byEmail('fake@fauna.com').first()!
                                       let orders = ['cart', 'processing', 'shipped', 'delivered'].map(status => {
-                                        let order: Any = Order.byCustomer(customer).firstWhere(o => o.status == status)
+                                        let order = Order.byCustomer(customer).firstWhere(o => o.status == status)
                                         if (order == null) {
-                                          let newOrder: Any = Order.create({
+                                          let newOrder = Order.create({
                                             customer: customer,
                                             status: status,
                                             createdAt: Time.now(),
                                             payment: {}
                                           })
-                                          let product: Any = Product.byName('Drone').first()!
-                                          let orderItem: Any = OrderItem.create({ order: newOrder, product: product, quantity: 1 })
+                                          let product = Product.byName('Drone').first()!
+                                          let orderItem = OrderItem.create({ order: newOrder, product: product, quantity: 1 })
                                           orderItem
                                           newOrder
                                         } else {
