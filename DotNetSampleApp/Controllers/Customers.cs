@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DotNetSampleApp.Controllers;
 
 /// <summary>
-/// Customers controller
+/// Customers controller 
 /// </summary>
 /// <param name="client">Fauna Client</param>
 [ApiController,
@@ -30,10 +30,10 @@ public class Customers(Client client) : ControllerBase
         //
         // Use projection to only return the fields you need.
         var query = Query.FQL($"""
-                               let customer = Customer.byId({customerId})!
+                               let customer: Any = Customer.byId({customerId})!
                                {QuerySnippets.CustomerResponse()}
                                """);
-
+        
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Customer>(query);
@@ -52,16 +52,16 @@ public class Customers(Client client) : ControllerBase
     {
         // Create a new Customer document with the provided fields.
         var query = Query.FQL($"""
-                               let customer = Customer.create({customer})
+                               let customer: Any = Customer.create({customer})
                                {QuerySnippets.CustomerResponse()}
                                """);
-
+        
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Customer>(query);
         return CreatedAtAction(nameof(GetCustomer), new { customerId = res.Data.Id }, res.Data);
     }
-
+    
     /// <summary>
     /// Update Customer Details
     /// </summary>
@@ -85,10 +85,10 @@ public class Customers(Client client) : ControllerBase
         //
         // Use projection to only return the fields you need.
         var query = Query.FQL($"""
-                               let customer =  Customer.byId({customerId})!.update({customer})
+                               let customer: Any =  Customer.byId({customerId})!.update({customer})
                                {QuerySnippets.CustomerResponse()}
                                """);
-
+        
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Customer>(query);
@@ -116,23 +116,25 @@ public class Customers(Client client) : ControllerBase
         // Make sure to URL encode the `afterToken` value to preserve these
         // characters in URLs.
         var query = !string.IsNullOrEmpty(afterToken)
-
+        
             // Paginate with the after token if it's present.
             ? Query.FQL($"Set.paginate({afterToken})")
-
+            
             // Define an FQL query to retrieve a page of orders for a given customer.
             // Get the Customer document by id, using the ! operator to assert that the document exists.
             // If the document does not exist, Fauna will throw a document_not_found error. We then
             // use the Order.byCustomer index to retrieve all orders for that customer and map over
             // the results to return only the fields we care about.
             : Query.FQL($$"""
-                let customer = Customer.byId({{customerId}})!
+                let customer: Any = Customer.byId({{customerId}})!
                 Order.byCustomer(customer).pageSize({{pageSize}}).map((order) => {
+                  let order: Any = order
+
                   // Return the order.
                   {{QuerySnippets.OrderResponse()}}
                 })
                 """);
-
+        
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var result = await client.QueryAsync<Page<Order>>(query);
@@ -154,12 +156,12 @@ public class Customers(Client client) : ControllerBase
         // Call our getOrCreateCart UDF to get the customer's cart. The function
         // definition can be found 'server/schema/functions.fsl'.
         var query = Query.FQL($"""
-                                let order = getOrCreateCart({customerId})
-
+                                let order: Any = getOrCreateCart({customerId})
+                                
                                 // Return the cart.
                                 {QuerySnippets.OrderResponse()}
                                 """);
-
+        
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Order>(query);
@@ -182,12 +184,12 @@ public class Customers(Client client) : ControllerBase
         // definition can be found 'server/schema/functions.fsl'.
         var query = Query.FQL($"""
                 let req = {item}
-                let order = createOrUpdateCartItem({customerId}, req.productName, req.quantity)
+                let order: Any = createOrUpdateCartItem({customerId}, req.productName, req.quantity)
 
                 // Return the cart as an OrderResponse object.
                 {QuerySnippets.OrderResponse()}
                 """);
-
+        
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Order>(query);
@@ -208,12 +210,12 @@ public class Customers(Client client) : ControllerBase
         // Get the customer's cart by id, using the ! operator to assert that the document exists.
         // If the document does not exist, Fauna will throw a document_not_found error.
         var query = Query.FQL($"""
-                                let order = Customer.byId({customerId})!.cart
-
+                                let order: Any = Customer.byId({customerId})!.cart
+                                
                                 // Return the cart as an OrderResponse object.
                                 {QuerySnippets.OrderResponse()}
                                 """);
-
+        
         // Connect to fauna using the client. The query method accepts an FQL query
         // as a parameter and a generic type parameter representing the return type.
         var res = await client.QueryAsync<Order>(query);
