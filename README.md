@@ -96,21 +96,20 @@ To run the app, you'll need:
 3. Use the Fauna CLI to create the `EcommerceDotnet` database:
 
     ```sh
-    # Replace 'us-std' with your preferred Region Group
-    # identifier: 'us-std' (United States), 'eu-std' (Europe),
-    # or `global`.
+    # Replace 'us' with your preferred Region Group:
+    # 'us' (United States), 'eu' (Europe), or `global`.
     fauna database create \
       --name EcommerceDotnet \
-      --database us-std
+      --database us
     ```
 
 4.  Push the `.fsl` files in the `schema` directory to the `EcommerceDotnet`
     database:
 
     ```sh
-    # Replace 'us-std' with your Region Group identifier.
+    # Replace 'us' with your Region Group identifier.
     fauna schema push \
-      --database us-std/EcommerceDotnet \
+      --database us/EcommerceDotnet \
       --dir ./schema
     ```
 
@@ -120,14 +119,14 @@ To run the app, you'll need:
 
     ```sh
     fauna schema status \
-      --database us-std/EcommerceDotnet
+      --database us/EcommerceDotnet
     ```
 
 6.  When the status is `ready`, commit the staged schema to the database:
 
     ```sh
     fauna schema commit \
-      --database us-std/EcommerceDotnet
+      --database us/EcommerceDotnet
     ```
 
     The commit applies the staged schema to the database. The commit creates the
@@ -138,7 +137,7 @@ To run the app, you'll need:
 
     ```sh
     fauna query "Key.create({ role: 'server' })" \
-      --database us-std/EcommerceDotnet
+      --database us/EcommerceDotnet
     ```
 
     Copy the returned `secret`. The app can use the key's secret to authenticate
@@ -271,7 +270,7 @@ Customer documents and related API responses:
 
     ```sh
     fauna schema push \
-      --database us-std/EcommerceDotnet \
+      --database us/EcommerceDotnet \
       --role admin \
       --dir ./schema
     ```
@@ -282,7 +281,7 @@ Customer documents and related API responses:
 
     ```sh
     fauna schema status \
-      --database us-std/EcommerceDotnet
+      --database us/EcommerceDotnet
     ```
 
 6.  When the status is `ready`, commit the staged schema changes to the
@@ -290,7 +289,7 @@ Customer documents and related API responses:
 
     ```sh
     fauna schema commit \
-      --database us-std/EcommerceDotnet
+      --database us/EcommerceDotnet
     ```
 
 7. In `sample-app/Models/Customer.cs`, add the
