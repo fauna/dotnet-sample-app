@@ -268,7 +268,7 @@ Customer documents and related API responses:
 4.  Push the updated schema to the `EcommerceDotnet` database:
 
     ```sh
-    # Authetnicated using the FAUNA_SECRET env var.
+    # Authenticated using the FAUNA_SECRET env var.
     fauna schema push
     ```
 
