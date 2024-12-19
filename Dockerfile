@@ -9,7 +9,7 @@ RUN dotnet restore
 
 COPY . ./
 
-WORKDIR /app/DotNetSampleApp
+WORKDIR /app/sample-app
 RUN dotnet publish -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
