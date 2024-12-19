@@ -132,10 +132,10 @@ To run the app, you'll need:
     collections and user-defined functions (UDFs) defined in the `.fsl` files of the
     `schema` directory.
 
-7. Create a key with the `server` role for the `EcommerceDotnet` database:
+7. Create a key with the `admin` role for the `EcommerceDotnet` database:
 
     ```sh
-    fauna query "Key.create({ role: 'server' })" \
+    fauna query "Key.create({ role: 'admin' })" \
       --database us/EcommerceDotnet
     ```
 
@@ -268,9 +268,8 @@ Customer documents and related API responses:
 4.  Push the updated schema to the `EcommerceDotnet` database:
 
     ```sh
-    fauna schema push \
-      --database us/EcommerceDotnet \
-      --role admin
+    # Authetnicated using the FAUNA_SECRET env var.
+    fauna schema push
     ```
 
     When prompted, accept and stage the schema.
@@ -278,16 +277,14 @@ Customer documents and related API responses:
 5.  Check the status of the staged schema:
 
     ```sh
-    fauna schema status \
-      --database us/EcommerceDotnet
+    fauna schema status
     ```
 
 6.  When the status is `ready`, commit the staged schema changes to the
     database:
 
     ```sh
-    fauna schema commit \
-      --database us/EcommerceDotnet
+    fauna schema commit
     ```
 
 7. In `DotNetSampleApp/Models/Customer.cs`, add the
