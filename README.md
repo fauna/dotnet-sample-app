@@ -69,7 +69,7 @@ To run the app, you'll need:
 
 - .NET 8.0 or later.
 
-- [Fauna CLI](https://docs.fauna.com/fauna/current/tools/shell/) 4.0.0-beta or later.
+- [Fauna CLI](https://docs.fauna.com/fauna/current/build/cli/v4/) 4.0.0-beta or later.
     - [Node.js](https://nodejs.org/en/download/) v20.x or later.
 
   To install the CLI, run:
@@ -109,8 +109,7 @@ To run the app, you'll need:
     ```sh
     # Replace 'us' with your Region Group identifier.
     fauna schema push \
-      --database us/EcommerceDotnet \
-      --dir ./schema
+      --database us/EcommerceDotnet
     ```
 
     When prompted, accept and stage the schema.
@@ -191,7 +190,7 @@ The app includes seed data that's populated when you make a successful request t
 
 ## HTTP API endpoints
 
-The app's HTTP API endpoints are defined in the `sample-app/Controllers` directory.
+The app's HTTP API endpoints are defined in the `DotNetSampleApp/Controllers` directory.
 
 An OpenAPI spec and Swagger UI docs for the endpoints are available at:
 
@@ -251,7 +250,7 @@ Customer documents and related API responses:
 
     Save `schema/collections.fsl`.
 
-3. In `sample-app/Controllers/QuerySnippets.cs`, add the `totalPurchaseAmt` field to the
+3. In `DotNetSampleApp/Controllers/QuerySnippets.cs`, add the `totalPurchaseAmt` field to the
    `CustomerResponse` method's projection:
 
     ```diff
@@ -271,8 +270,7 @@ Customer documents and related API responses:
     ```sh
     fauna schema push \
       --database us/EcommerceDotnet \
-      --role admin \
-      --dir ./schema
+      --role admin
     ```
 
     When prompted, accept and stage the schema.
@@ -292,7 +290,7 @@ Customer documents and related API responses:
       --database us/EcommerceDotnet
     ```
 
-7. In `sample-app/Models/Customer.cs`, add the
+7. In `DotNetSampleApp/Models/Customer.cs`, add the
    `totalPurchaseAmt` field to the `Customer` class:
 
     ```diff
@@ -320,7 +318,7 @@ Customer documents and related API responses:
     }
     ```
 
-    Save `sample-app/Models/Customer.cs`.
+    Save `DotNetSampleApp/Models/Customer.cs`.
 
    Customer-related endpoints use this template to project Customer
    document fields in responses.
