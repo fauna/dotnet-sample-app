@@ -96,7 +96,7 @@ To run the app, you'll need:
 3. Use the Fauna CLI to create the `EcommerceDotnet` database:
 
     ```sh
-    # Replace 'us' with your preferred Region Group:
+    # Replace 'us' with your preferred region group:
     # 'us' (United States), 'eu' (Europe), or `global` (available to Pro accounts and above).
     fauna database create \
       --name EcommerceDotnet \
@@ -107,7 +107,7 @@ To run the app, you'll need:
     database:
 
     ```sh
-    # Replace 'us' with your Region Group identifier.
+    # Replace 'us' with your region group identifier.
     fauna schema push \
       --database us/EcommerceDotnet
     ```
