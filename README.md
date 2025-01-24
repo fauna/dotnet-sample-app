@@ -70,7 +70,8 @@ To run the app, you'll need:
 - .NET 8.0 or later.
 
 - [Fauna CLI v4 beta](https://docs.fauna.com/fauna/current/build/cli/v4/) or later.
-    - [Node.js](https://nodejs.org/en/download/) v22.x or later.
+    - [Node.js](https://nodejs.org/en/download/) v20.18 or later.
+      - [Node.js](https://nodejs.org/en/download/) v22 or later recommended.
 
   To install the CLI, run:
 
