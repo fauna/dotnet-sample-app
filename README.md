@@ -76,7 +76,7 @@ To run the app, you'll need:
   To install the CLI, run:
 
     ```sh
-    npm install -g fauna-shell@">=4.0.0-beta"
+    npm install -g fauna-shell
     ```
 
 ## Setup
